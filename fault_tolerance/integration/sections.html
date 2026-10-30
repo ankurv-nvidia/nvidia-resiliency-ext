@@ -1,0 +1,202 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sections API integration &mdash; nvidia-resiliency-ext 0.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fe7df9b0"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Segment Health Check" href="segment_health_check.html" />
+    <link rel="prev" title="Megatron-LM integration" href="megatron.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            nvidia-resiliency-ext
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">InJob restart</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../usage_guide.html">InJob restart usage guide</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../integration.html">Integration guides</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="megatron.html">Megatron-LM integration</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Sections API integration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configure-before-launch">Configure before launch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#instrument-the-workload">Instrument the workload</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="segment_health_check.html">Segment Health Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="heartbeats.html">Legacy heartbeats API integration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html">Configuration and timeouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deployment.html">Multinode deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../operations.html">Operations and troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../services.html">Optional health checks and attribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../timeout_dump.html">Timeout dumps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">API documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../checkpointing/async/index.html">Async Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../checkpointing/local/index.html">Local Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../straggler_det/index.html">Straggler Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../attribution/index.html">Failure Attribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../shared_utils/index.html">Shared Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nvidia-resiliency-ext</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">InJob restart</a></li>
+          <li class="breadcrumb-item"><a href="../integration.html">Integration guides</a></li>
+      <li class="breadcrumb-item active">Sections API integration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/fault_tolerance/integration/sections.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sections-api-integration">
+<h1>Sections API integration<a class="headerlink" href="#sections-api-integration" title="Link to this heading"></a></h1>
+<p>Use named sections to give setup, training/evaluation, and checkpoint work
+separate fixed deadlines. Megatron already provides this instrumentation; see
+<a class="reference internal" href="megatron.html"><span class="doc">Megatron-LM integration</span></a>. This page describes integrating another training loop.</p>
+<section id="configure-before-launch">
+<h2>Configure before launch<a class="headerlink" href="#configure-before-launch" title="Link to this heading"></a></h2>
+<p>For the small DDP example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ft_launcher<span class="w"> </span>--nproc-per-node<span class="o">=</span><span class="m">2</span><span class="w"> </span>--rdzv-endpoint<span class="o">=</span>localhost:0<span class="w"> </span>--max-restarts<span class="o">=</span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ft-rank-section-timeouts<span class="w"> </span>init:120,step:30,checkpoint:120<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ft-rank-out-of-section-timeout<span class="w"> </span><span class="m">60</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>examples/fault_tolerance/train_ddp_sections_api.py<span class="w"> </span>--device<span class="o">=</span>cpu
+</pre></div>
+</div>
+<p>The section names are application-defined and must match configuration exactly.
+An omitted name skips both monitoring messages and timing collection; a name
+mapped to <code class="docutils literal notranslate"><span class="pre">null</span></code> sends events but has no finite deadline. Finite timeouts must
+cover the slowest expected operation in each phase.</p>
+<p>Sections can be nested or overlap, but a section cannot be opened twice without
+being closed. Out-of-section time is checked only when no monitored section is
+open, with the warmup rules described in <a class="reference internal" href="../configuration.html"><span class="doc">Configuration and timeouts</span></a>. It bounds
+worker execution after monitoring begins, not launcher/rendezvous startup time.
+Work before the client connects is outside this monitor’s coverage.</p>
+</section>
+<section id="instrument-the-workload">
+<h2>Instrument the workload<a class="headerlink" href="#instrument-the-workload" title="Link to this heading"></a></h2>
+<p>On every worker, initialize a <code class="docutils literal notranslate"><span class="pre">RankMonitorClient</span></code>, then report section
+boundaries at equivalent training phases. Shut monitoring down on normal exit.
+For example, after distributed initialization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nvidia_resiliency_ext.fault_tolerance</span><span class="w"> </span><span class="kn">import</span> <span class="n">RankMonitorClient</span>
+
+<span class="n">monitor</span> <span class="o">=</span> <span class="n">RankMonitorClient</span><span class="p">()</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">init_workload_monitoring</span><span class="p">()</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">start_section</span><span class="p">(</span><span class="s2">"init"</span><span class="p">)</span>
+<span class="c1"># construct model/optimizer and restore checkpoint</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">end_section</span><span class="p">(</span><span class="s2">"init"</span><span class="p">)</span>
+
+<span class="n">monitor</span><span class="o">.</span><span class="n">start_section</span><span class="p">(</span><span class="s2">"step"</span><span class="p">)</span>
+<span class="c1"># forward, backward, optimizer step</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">end_section</span><span class="p">(</span><span class="s2">"step"</span><span class="p">)</span>
+
+<span class="n">monitor</span><span class="o">.</span><span class="n">start_section</span><span class="p">(</span><span class="s2">"checkpoint"</span><span class="p">)</span>
+<span class="c1"># save training state; synchronize peers as required by the checkpoint backend</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">end_section</span><span class="p">(</span><span class="s2">"checkpoint"</span><span class="p">)</span>
+<span class="n">monitor</span><span class="o">.</span><span class="n">shutdown_workload_monitoring</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Monitoring is independent from checkpoint storage. The DDP example keeps
+synchronous rank-0 PyTorch save/load; Megatron uses NVRx async save/finalization
+through its own checkpoint lifecycle. All ranks must participate consistently in
+checkpoint collectives and any optional timeout-calculation collectives.</p>
+<p>Do not blindly close a failed section and continue training after an exception;
+the workload must either establish a valid recovery path or let workers fail so
+the launcher can restart the group. For graceful scheduler shutdown, record the
+signal locally and handle it at a synchronized safe point in the training loop,
+rather than running distributed operations inside a signal handler.</p>
+<p>Fixed configuration is the default. The experimental
+<code class="docutils literal notranslate"><span class="pre">calculate_and_set_section_timeouts()</span></code> and timeout-state persistence APIs
+remain available but are not needed for this integration. See
+<a class="reference internal" href="../configuration.html"><span class="doc">Configuration and timeouts</span></a> before experimenting with them.</p>
+<p>See <a class="reference internal" href="../examples/train_ddp_sections.html"><span class="doc">Section monitoring and checkpoint recovery with DDP</span></a> for runnable commands and checkpoint
+recovery checks.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="megatron.html" class="btn btn-neutral float-left" title="Megatron-LM integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="segment_health_check.html" class="btn btn-neutral float-right" title="Segment Health Check" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, NVIDIA Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

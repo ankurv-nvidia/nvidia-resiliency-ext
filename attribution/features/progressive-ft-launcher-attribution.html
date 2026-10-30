@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progressive FT Launcher Attribution &mdash; nvidia-resiliency-ext 0.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fe7df9b0"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Restart Agent" href="restart-agent.html" />
+    <link rel="prev" title="Attribution Feature Requirements" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            nvidia-resiliency-ext
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fault_tolerance/index.html">InJob restart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../checkpointing/async/index.html">Async Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../checkpointing/local/index.html">Local Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../straggler_det/index.html">Straggler Detection</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Failure Attribution</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Attribution Feature Requirements</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Progressive FT Launcher Attribution</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#runtime-flow">Runtime Flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis-intents">Analysis Intents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#terminal-equivalence">Terminal Equivalence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#client-failure-behavior">Client Failure Behavior</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#external-attrsvc">External Attrsvc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#verification">Verification</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="restart-agent.html">Restart Agent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="requirements-template.html">Attribution Feature Requirements Template</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../shared_utils/index.html">Shared Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nvidia-resiliency-ext</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Failure Attribution</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Attribution Feature Requirements</a></li>
+      <li class="breadcrumb-item active">Progressive FT Launcher Attribution</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/attribution/features/progressive-ft-launcher-attribution.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="progressive-ft-launcher-attribution">
+<h1>Progressive FT Launcher Attribution<a class="headerlink" href="#progressive-ft-launcher-attribution" title="Link to this heading"></a></h1>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">ft_launcher</span></code> integration submits one cycle-unique application-log path
+to attrsvc. Terminal analysis is the production default. Optional progressive
+work can move L0A parsing earlier while the workload is running, but it does not
+change the final evidence, policy, or response contract.</p>
+<p>The Restart Agent’s internal progressive state and terminal-equivalence
+requirements are specified in
+<code class="docutils literal notranslate"><span class="pre">docs/design/attribution/restart_agent/PROGRESSIVE.md</span></code>. The complete HTTP and
+NVRx client lifecycle is specified in
+<code class="docutils literal notranslate"><span class="pre">docs/design/attribution/restart_agent/ATTRSVC_INTEGRATION.md</span></code>.</p>
+</section>
+<section id="runtime-flow">
+<h2>Runtime Flow<a class="headerlink" href="#runtime-flow" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>At cycle start, NVRx creates the expected per-cycle log path and sends
+<code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/logs</span></code> with <code class="docutils literal notranslate"><span class="pre">analysis_intent=&quot;progressive&quot;</span></code>.</p></li>
+<li><p>Attrsvc registers the attempt. By default it performs no pre-end analysis.
+When progressive precomputation is enabled, it incrementally performs L0A
+work over complete log lines.</p></li>
+<li><p>When the cycle fails, NVRx sends the same path with
+<code class="docutils literal notranslate"><span class="pre">analysis_intent=&quot;terminal&quot;</span></code>. Attrsvc schedules authoritative analysis in
+the background after a bounded log-convergence drain.</p></li>
+<li><p>NVRx restarts the workload without waiting for the recommendation. Its
+background poller sends <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/logs?wait=false</span></code> until attrsvc reports
+<code class="docutils literal notranslate"><span class="pre">completed</span></code> or the request is abandoned.</p></li>
+<li><p>A completed STOP recommendation terminates whichever cycle is running then.
+Every other completed recommendation is non-stopping at the NVRx boundary.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/logs?wait=false</span></code> is a probe. It never starts analysis. Terminal work is
+started only by an accepted terminal POST.</p>
+</section>
+<section id="analysis-intents">
+<h2>Analysis Intents<a class="headerlink" href="#analysis-intents" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">track_only</span></code></dt><dd><p>Register the path without starting verdict-producing work.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">progressive</span></code></dt><dd><p>Register the path. If both
+<code class="docutils literal notranslate"><span class="pre">NVRX_ATTRSVC_RESTART_AGENT_PROGRESSIVE_ENABLED=true</span></code> and the service’s
+progressive policy permit it, schedule non-authoritative L0A precomputation.
+Otherwise this has registration-only behavior.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">terminal</span></code></dt><dd><p>Start authoritative background analysis for the registered attempt. The
+terminal path reads from byte zero when no usable progressive state exists.</p>
+</dd>
+</dl>
+</section>
+<section id="terminal-equivalence">
+<h2>Terminal Equivalence<a class="headerlink" href="#terminal-equivalence" title="Link to this heading"></a></h2>
+<p>Progressive and terminal-only execution use the same byte-range reader,
+incremental line decoder, L0 observation index, and canonical L0A finalizer.
+Progressive chunk boundaries and polling metadata must not change evidence,
+identity, progress facts, or the final recommendation.</p>
+<p>At terminal submission, attrsvc waits for the live log to converge within a
+bounded window, ingests the unread tail, and finalizes one source boundary. A
+checkpoint is reused only when it was built from that exact boundary. Missing,
+stale, failed, or disabled progressive state falls back to the same terminal
+path from byte zero.</p>
+</section>
+<section id="client-failure-behavior">
+<h2>Client Failure Behavior<a class="headerlink" href="#client-failure-behavior" title="Link to this heading"></a></h2>
+<dl>
+<dt>POST</dt><dd><p>NVRx makes one POST attempt with a two-second client timeout. It installs a
+pollable request only after terminal POST returns <code class="docutils literal notranslate"><span class="pre">2xx</span></code>. If terminal POST
+is not accepted, that cycle is not polled, so a nonexistent request cannot
+pin the first-come-first-served slot.</p>
+<p>The immediately following optional progressive POST is also suppressed once.
+Since it normally follows the failed terminal POST at the next cycle start,
+this avoids a second likely failure and up to another two seconds on the FT
+path. Terminal POST is never suppressed.</p>
+</dd>
+<dt>GET</dt><dd><p><code class="docutils literal notranslate"><span class="pre">pending</span></code> and <code class="docutils literal notranslate"><span class="pre">in_flight</span></code> mean attrsvc still owns the accepted request.
+<code class="docutils literal notranslate"><span class="pre">completed</span></code> closes it. If attrsvc restarts and loses process-local request
+state, a later GET returns <code class="docutils literal notranslate"><span class="pre">404</span></code>; NVRx abandons that cycle and releases the
+slot so another failed cycle can be analyzed.</p>
+<p>Permanent request errors are abandoned immediately. Availability failures,
+including transport errors, timeouts, malformed responses, and transient
+HTTP statuses, are abandoned after three consecutive failures total. A valid
+<code class="docutils literal notranslate"><span class="pre">pending</span></code> or <code class="docutils literal notranslate"><span class="pre">in_flight</span></code> response resets that count.</p>
+</dd>
+</dl>
+</section>
+<section id="external-attrsvc">
+<h2>External Attrsvc<a class="headerlink" href="#external-attrsvc" title="Link to this heading"></a></h2>
+<p>NVRx can use the same HTTP lifecycle with an attrsvc on another host as long as
+both processes can access the same application-log path. The attrsvc Slurm
+deployment uses a supervisor daemon as its batch payload so transient attrsvc
+process crashes are restarted on the same allocated CPU node and endpoint.</p>
+<p>The supervisor preserves endpoint reachability, not service memory. Active
+request and Restart Agent history state are process-local and are lost when the
+attrsvc process restarts. The GET request-loss behavior above prevents such a
+lost request from blocking all later cycles.</p>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">NVRX_ATTRSVC_RESTART_AGENT_PROGRESSIVE_ENABLED</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">false</span></code> by default. Set to <code class="docutils literal notranslate"><span class="pre">true</span></code> to allow pre-end L0A work.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NVRX_ATTRSVC_PROGRESSIVE_ANALYSIS</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">all_explicit</span></code> permits explicit progressive requests; <code class="docutils literal notranslate"><span class="pre">off</span></code> disables
+them. This policy is subordinate to the Restart Agent progressive switch.</p>
+</dd>
+</dl>
+<p>Terminal log convergence is configured by the attrsvc Restart Agent quiet,
+maximum-wait, and polling settings. These service settings apply to attrsvc
+terminal submissions. Direct CLI and library analysis of an already complete
+file does not use the service convergence wait.</p>
+</section>
+<section id="verification">
+<h2>Verification<a class="headerlink" href="#verification" title="Link to this heading"></a></h2>
+<p>Coverage must establish that:</p>
+<ul class="simple">
+<li><p>terminal-only and progressive execution produce equivalent canonical L0A and
+final results for the same bytes;</p></li>
+<li><p>terminal POST acceptance precedes installation of the NVRx poll slot;</p></li>
+<li><p>an unaccepted terminal POST suppresses only the next progressive POST;</p></li>
+<li><p>request loss, permanent rejection, and bounded GET availability failures
+release the slot for later cycles;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pending</span></code> and <code class="docutils literal notranslate"><span class="pre">in_flight</span></code> reset consecutive GET availability failures;</p></li>
+<li><p>a completed STOP is latched while other completed actions are non-stopping;
+and</p></li>
+<li><p>the Slurm supervisor preserves the allocated node and endpoint across bounded
+attrsvc process restarts and forwards Slurm shutdown signals without restart.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Attribution Feature Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="restart-agent.html" class="btn btn-neutral float-right" title="Restart Agent" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, NVIDIA Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InJob restart usage guide &mdash; nvidia-resiliency-ext 0.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=fe7df9b0"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Integration guides" href="integration.html" />
+    <link rel="prev" title="InJob restart" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            nvidia-resiliency-ext
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">InJob restart</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">InJob restart usage guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#recovery-responsibilities">Recovery responsibilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#processes-and-terminology">Processes and terminology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#launch-and-monitor">Launch and monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recovery-limits">Recovery limits</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#where-to-go-next">Where to go next</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="integration.html">Integration guides</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration and timeouts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">Multinode deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operations.html">Operations and troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="services.html">Optional health checks and attribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeout_dump.html">Timeout dumps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../checkpointing/async/index.html">Async Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../checkpointing/local/index.html">Local Checkpointing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../straggler_det/index.html">Straggler Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../attribution/index.html">Failure Attribution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../shared_utils/index.html">Shared Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nvidia-resiliency-ext</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">InJob restart</a></li>
+      <li class="breadcrumb-item active">InJob restart usage guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/fault_tolerance/usage_guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="injob-restart-usage-guide">
+<h1>InJob restart usage guide<a class="headerlink" href="#injob-restart-usage-guide" title="Link to this heading"></a></h1>
+<p>InJob restart detects failed or hung training workers and launches a
+new worker group within the running job. Use <code class="docutils literal notranslate"><span class="pre">ft_launcher</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">torchrun</span></code> and enable the workload’s section-monitoring integration.</p>
+<p>The recommended Megatron-LM deployment uses <strong>fixed section timeouts supplied
+on the command line</strong> and <strong>NVRx-backed asynchronous checkpointing through
+Megatron</strong>. Begin with <a class="reference internal" href="examples/megatron_gpt.html"><span class="doc">GPT checkpoint recovery with Megatron-LM</span></a>. For a small CPU/GPU example
+of the monitoring API, use <a class="reference internal" href="examples/train_ddp_sections.html"><span class="doc">Section monitoring and checkpoint recovery with DDP</span></a>, which retains
+synchronous PyTorch checkpointing.</p>
+<section id="recovery-responsibilities">
+<h2>Recovery responsibilities<a class="headerlink" href="#recovery-responsibilities" title="Link to this heading"></a></h2>
+<p>If a worker fails after checkpoint 20 while training iteration 27, the next
+worker group loads checkpoint 20 and repeats subsequent training work.
+NVRx does not preserve the failed workers’ model or optimizer memory.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>worker failure or section timeout
+    -&gt; terminate the worker group
+    -&gt; health checks and barrier rendezvous
+    -&gt; assign healthy active nodes (promote spares if available)
+    -&gt; launch new training processes
+    -&gt; workload loads the latest completed checkpoint
+    -&gt; training commits another optimizer step
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>NVRx InJob</strong> monitors workers and coordinates termination, rendezvous, and
+process replacement. All workers restart when any worker fails.</p></li>
+<li><p><strong>The workload</strong> saves and restores model, optimizer, RNG, scheduler, and data
+progress as required by its training algorithm. A restart without checkpoint
+restoration starts training again.</p></li>
+<li><p><strong>The scheduler and deployment scripts</strong> allocate resources, release failed
+allocation units, admit cold replacements, and arrange continuation across
+jobs. <code class="docutils literal notranslate"><span class="pre">ft_launcher</span></code> does not allocate or cancel Slurm jobs.</p></li>
+</ul>
+<p>Checkpoint recovery and monitoring are separate choices. The DDP example uses
+rank-0 <code class="docutils literal notranslate"><span class="pre">torch.save</span></code> / <code class="docutils literal notranslate"><span class="pre">torch.load</span></code>. Megatron assembles distributed training
+state and uses NVRx’s asynchronous checkpoint queue and writer infrastructure.
+See <a class="reference internal" href="integration/megatron.html"><span class="doc">Megatron-LM integration</span></a> for completion and finalization semantics.</p>
+</section>
+<section id="processes-and-terminology">
+<h2>Processes and terminology<a class="headerlink" href="#processes-and-terminology" title="Link to this heading"></a></h2>
+<p>Each compute node runs one <code class="docutils literal notranslate"><span class="pre">ft_launcher</span></code>. It starts training workers and a
+separate rank-monitor process for each local worker. Workers connect to their
+monitors using local Unix sockets and report named section boundaries. Monitors
+do not communicate with one another; launchers coordinate through rendezvous.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>training worker &lt;-- local IPC --&gt; rank monitor
+       ^                              ^
+       | starts/restarts               | starts
+       +--------- ft_launcher --------+
+                       |
+                rendezvous store
+</pre></div>
+</div>
+<p>A <strong>cycle</strong> is one worker-group attempt: cycle 0 is the initial attempt, cycle 1
+the first restart. A <strong>generation</strong> in the singleton example is a separate
+Slurm array allocation containing multiple possible cycles. A <strong>hot spare</strong> is
+an allocated, joined launcher with no training workers. A <strong>cold spare</strong> is a
+pending scheduler allocation and is not yet available to rendezvous.</p>
+<p>The rendezvous/TCPStore host is a service role, distinct from training rank 0.
+The singleton example colocates these roles on array task 0. Training ranks can
+change across restarts; use the rank-to-node map from the failed cycle when
+investigating a failure.</p>
+</section>
+<section id="launch-and-monitor">
+<h2>Launch and monitor<a class="headerlink" href="#launch-and-monitor" title="Link to this heading"></a></h2>
+<p>Launcher options precede the training entrypoint; workload options follow it.
+For a workload that opens Megatron’s section names, the essential shape is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ft_launcher<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--nnodes<span class="o">=</span><span class="m">1</span><span class="w"> </span>--nproc-per-node<span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--rdzv-backend<span class="o">=</span>c10d<span class="w"> </span>--rdzv-endpoint<span class="o">=</span>localhost:0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max-restarts<span class="o">=</span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ft-rank-section-timeouts<span class="w"> </span>setup:900,step:120,checkpointing:600<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--ft-rank-out-of-section-timeout<span class="o">=</span><span class="m">180</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>/path/to/Megatron-LM/pretrain_gpt.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--enable-ft-package<span class="w"> </span>...
+</pre></div>
+</div>
+<p>This illustrates argument placement; use the complete runnable example in
+<a class="reference internal" href="examples/megatron_gpt.html"><span class="doc">GPT checkpoint recovery with Megatron-LM</span></a> for model, data, and checkpoint arguments.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--max-restarts</span></code> defaults to <strong>0</strong>. Set a positive budget to enable recovery.
+It counts restarts across the rendezvous cycles, including for replacement
+launchers joining an existing run. Only the <code class="docutils literal notranslate"><span class="pre">any-failed</span></code> policy is supported;
+omit the deprecated <code class="docutils literal notranslate"><span class="pre">--ft-restart-policy</span></code> option.</p>
+<p>Barrier rendezvous is the only supported InJob rendezvous implementation.
+<code class="docutils literal notranslate"><span class="pre">--ft-rdzv-impl</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">barrier</span></code>; the removed <code class="docutils literal notranslate"><span class="pre">legacy</span></code> value is
+rejected. For multinode runs, all launchers need the same reachable rendezvous
+endpoint, run ID, and training shape. Do not use <code class="docutils literal notranslate"><span class="pre">localhost:0</span></code> across nodes.
+Under Slurm launch <strong>one task per node</strong>, with <code class="docutils literal notranslate"><span class="pre">ft_launcher</span></code> starting the
+local GPU workers. See <a class="reference internal" href="deployment.html"><span class="doc">Multinode deployment</span></a>.</p>
+<p>Configure the sections the workload actually opens. Megatron uses <code class="docutils literal notranslate"><span class="pre">setup</span></code>,
+<code class="docutils literal notranslate"><span class="pre">step</span></code>, and <code class="docutils literal notranslate"><span class="pre">checkpointing</span></code>; the DDP example uses <code class="docutils literal notranslate"><span class="pre">init</span></code>, <code class="docutils literal notranslate"><span class="pre">step</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">checkpoint</span></code>. A name absent from <code class="docutils literal notranslate"><span class="pre">rank_section_timeouts</span></code> is ignored by the
+client, including timing collection. A configured <code class="docutils literal notranslate"><span class="pre">None</span></code>/<code class="docutils literal notranslate"><span class="pre">null</span></code> timeout
+has no deadline. Neither heartbeat nor section hang detection has finite
+timeouts by default. Launching a workload alone does not instrument it.</p>
+<p>Timeouts must cover the deployed model, initialization and checkpoint loading,
+evaluation, asynchronous checkpoint finalization, and observed storage delays.
+The numbers in examples are starting points, not service guarantees. See
+<a class="reference internal" href="configuration.html"><span class="doc">Configuration and timeouts</span></a> for warmup and experimental calibration details.</p>
+</section>
+<section id="recovery-limits">
+<h2>Recovery limits<a class="headerlink" href="#recovery-limits" title="Link to this heading"></a></h2>
+<p>InJob needs a live control/store service, enough healthy nodes for the fixed
+training shape, a readable completed checkpoint, and a remaining restart budget.
+It does not repair bad data, incompatible checkpoints, persistent storage
+outages, or deterministic training errors. Spares replace nodes without changing
+the active world size; they do not implement elastic Megatron parallelism.</p>
+<p>Loss of the colocated rendezvous host ends that generation. The
+<a class="reference internal" href="examples/singleton_deployment.html"><span class="doc">Singleton job-array deployment (SLURM)</span></a> guide explains scheduler continuation and
+cleanup, including external intervention when a hard node loss prevents
+the batch script’s exit trap from running. The experimental external control
+process is described in <a class="reference internal" href="deployment.html"><span class="doc">Multinode deployment</span></a>.</p>
+</section>
+<section id="where-to-go-next">
+<h2>Where to go next<a class="headerlink" href="#where-to-go-next" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="integration/megatron.html"><span class="doc">Megatron-LM integration</span></a>: section boundaries and async checkpoint recovery.</p></li>
+<li><p><a class="reference internal" href="examples/megatron_gpt.html"><span class="doc">GPT checkpoint recovery with Megatron-LM</span></a>: small GPT recovery and multinode TP/PP variants.</p></li>
+<li><p><a class="reference internal" href="integration/sections.html"><span class="doc">Sections API integration</span></a>: integrating another training loop.</p></li>
+<li><p><a class="reference internal" href="configuration.html"><span class="doc">Configuration and timeouts</span></a>: CLI settings, defaults, and experimental features.</p></li>
+<li><p><a class="reference internal" href="operations.html"><span class="doc">Operations and troubleshooting</span></a>: checkpoint progress, cycle logs, stop decisions, and diagnosis.</p></li>
+<li><p><a class="reference internal" href="services.html"><span class="doc">Optional health checks and attribution</span></a>: optional health checks and attribution.</p></li>
+<li><p><a class="reference internal" href="timeout_dump.html"><span class="doc">Timeout dumps</span></a>: optional timeout stack capture.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="InJob restart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="integration.html" class="btn btn-neutral float-right" title="Integration guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, NVIDIA Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
